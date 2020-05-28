@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block body_block %}
+<div class="row">
+    <div class="col-10">
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+                <div class="card w-90">
+                    <div class="card-body">
+                        <form method="POST" id="prevented">
+                            {% csrf_token %}
+                            {{ post_form.as_p }}
+                            <button type="submit" class="save btn btn-primary">POST</button>
+                        </form>
+                    </div>
+                </div>
+            </li>            
+        </ul>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+                <div class="card w-90">
+                    <div class="card-body" id="for_button">
+                        <h5 class="card-title" username_id="{{ user_name }}">{{ user_name }}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">First Name: {{ first_name }}, Last Name: {{ last_name }}</h6>
+                        <p class="card-text">{{ user_introduction }}</p>
+                        <!-- <button type="button" class="btn btn-primary btn-sm" id="follow">
+                            FOLLOW +</button> -->
+                    </div>
+                </div>
+            </li>
+        </ul>
+        <ul class="list-group list-group-flush" id="postPool">
+            <!-- {% for posts in post_records %}
+            <li class="list-group-item">{{ posts.post }}
+              <p class="card-text text-right"><small class="text-muted">{{ posts.post_time|date:"Y-m-d H:i:s" }}</small></p>
+            </li>
+            {% endfor %} -->
+        </ul>
+    </div>
+    <div class="col-2">
+        <h1 class="display-4 font-italic">{{ user_name }}</h1>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block js_block %}
+<script type="text/javascript" src="{% static 'js/personal.js' %}"></script>
+{% endblock %}

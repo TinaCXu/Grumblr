@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block body_block %}
+<div class="row">
+    <div class="col">
+        <h1 class="display-3 font-italic">Welcome</h1>
+        <h1 class="display-3 font-italic">To</h1>
+        <h1 class="display-3 font-italic">Grumblr</h1>
+    </div>
+    <div class="col">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th scope="col" style="background-color: #ABEBC6;">
+                        <h1 class="display-4 text-center">Creat New Account</h1>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col"></div>
+                                <div class="col-10">
+                                    <form method="POST">
+                                        {% csrf_token %}
+                                        {{ register_form.as_p }}
+                                    
+                                        <div class="form-group row">
+                                            <button type="submit" class="save btn btn-primary btn-lg btn-block">Register and Login</button>
+                                        </div>
+                                    </form>    
+                                </div>
+                                <div class="col"></div>
+                            </div>
+                        </div>
+                    </th>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}
