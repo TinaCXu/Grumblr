@@ -11,7 +11,7 @@
                         <form method="POST" id="prevented">
                             {% csrf_token %}
                             {{ post_form.as_p }}
-                            <button type="submit" class="save btn btn-primary">POST</button>
+                            <button type="submit" class="save btn btn-primary" id="post">POST</button>
                         </form>
                     </div>
                 </div>
@@ -24,8 +24,6 @@
                         <h5 class="card-title" username_id="{{ user_name }}">{{ user_name }}</h5>
                         <h6 class="card-subtitle mb-2 text-muted">First Name: {{ first_name }}, Last Name: {{ last_name }}</h6>
                         <p class="card-text">{{ user_introduction }}</p>
-                        <!-- <button type="button" class="btn btn-primary btn-sm" id="follow">
-                            FOLLOW +</button> -->
                     </div>
                 </div>
             </li>
