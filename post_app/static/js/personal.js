@@ -1,5 +1,5 @@
 var cnt = 0;
-   $('button').click(function(){
+   $('#post').click(function(){
         console.log("you have click follow button!")
 
         $('#prevented').unbind().on('submit',function(event){
@@ -61,6 +61,7 @@ function getUpdatePost(){
     });
 }
 
+
 // decide follow or unfollow button type
 function buttonType(){
     console.log("trigger buttonType")
@@ -74,47 +75,55 @@ function buttonType(){
         console.log(typeof(data["followeder"][0]));
         if (data["followeder"].length == 0){
             console.log("Follow")
-            button_type = "Follow"
+            console.log($('#follow').val())
+            button_type = "FOLLOW +"
         }else{
             followeders = JSON.stringify(data["followeder"]);
             console.log(followeders)
             if (followeders.indexOf(target_user) != -1){
                 console.log("Unfollow")
+                console.log($('#follow').val())
+                console.log(document.getElementById('follow').innerHTML)
                 button_type = "UNFOLLOW -"
+
             }else{
                 console.log("Follow")
+                console.log($('#follow').val())
                 button_type = "FOLLOW +"
             }
         }
-        var button_html = '<button type="button" class="btn btn-primary btn-sm" id="follow">'
-        + button_type + '</button>'
-        console.log(button_html)
-        $("#for_button").append(button_html);
+        console.log(button_type)
+        $('#follow').prop("innerHTML", button_type)
     });
 }
 
 $(document).ready(function(){
     window.setInterval(getUpdatePost, 3000);
-    window.setTimeout(buttonType, 3000);
+    buttonType()
+    // window.setTimeout(buttonType, 3000);
 })
 
 // send follow or unfollow request to backend 
 $('#follow').click(function(){
-    console.log("you have click follow button!")
-    // if (button_type ==  "FOLLOW +"){
-    //     action = "follow"
-    // }else{
-    //     action = "unfollow"
-    // }
-    // $.ajax({
-    //     type: "POST",
-    //     url: "/follow/",
-    //     // the key-'post’ must be the same key in form, otherwise it cannot be saved in database
-    //     data: {'action':action, 'to_user':target_user},
-    //     datatype: "json",
-    //     success: function(data){
-    //         console.log('success!')},
-    //     error: function(){
-    //         console.log('fail!')},
-    // })
+    alert("you have click follow button!")
+    if (button_type == "FOLLOW +"){
+        action = "follow"
+        button_type = "UNFOLLOW -"
+        $('#follow').prop("innerHTML", button_type)
+    }else{
+        action = "unfollow"
+        button_type = "FOLLOW +"
+        $('#follow').prop("innerHTML", button_type)
+    }
+    $.ajax({
+        type: "POST",
+        url: "/follow/",
+        // the key-'post’ must be the same key in form, otherwise it cannot be saved in database
+        data: {'action':action, 'to_user':target_user, 'to_user_id':url_user_id},
+        datatype: "json",
+        success: function(data){
+            console.log('success!')},
+        error: function(){
+            console.log('fail!')},
+    })
 })

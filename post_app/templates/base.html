@@ -18,16 +18,21 @@
           
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                  
+                <!-- <li class="nav-item">
                   <a class="nav-link"  href="#">ADMIN <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
                   <a class="nav-link" href="#"></a>
-                </li>
+                </li> -->
                 {% if user.is_authenticated %}
                 <li class="nav-item">
-                  <a class='nav-link' href="{% url 'logout' %}">LOGOUT</a></li>
+                  <a class='nav-link' href="{% url 'global' %}">Global Stream</a></li>
+                <li class="nav-item">
+                  <a class='nav-link' href="{% url 'personal_stream' %}">Personal Stream</a></li>
+                <li class="nav-item">
+                  <a class='nav-link' href="{% url 'personal_profile' %}">Personal Profile</a></li>
+                <li class="nav-item">
+                <a class='nav-link' href="{% url 'logout' %}">LOGOUT</a></li>
                 {% else %}
                 <li class="nav-item">
                   <a class='nav-link' href="{% url 'login' %}">LOGIN</a></li>

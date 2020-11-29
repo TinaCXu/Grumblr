@@ -177,6 +177,113 @@ def UpdatePostView(request, timestamp):
             return HttpResponse(json.dumps(newest_posts), content_type='application/json')
     return HttpResponse("404")
 
+def FollowPostView(request):
+    if request.method == 'GET':
+        post_form = forms.PostForm
+        followeders = Follow.objects.filter(follower=request.user).all()
+        followed_list = []
+        for followder in followeders:
+            followed_list.append(str(followder.followed))
+        print(followed_list)
+        followed_user_list = User.objects.filter(username__in=followed_list)
+        print(followed_user_list)
+        print(followed_user_list[0].id)
+        followed_id_list = []
+        for followed in followed_user_list:
+            followed_id_list.append(str(followed.id))
+        print(followed_id_list)
+        post_list = UserPost.objects.filter(user__in=followed_id_list).order_by('-post_time')
+        print(post_list)
+        context = {}
+        context['post_form'] = post_form
+        context['post_records'] = post_list
+        return render(request,'personal_stream.html',context)
+    if request.method == 'POST':
+        #if it is post, user is submitting info by form.
+        #step 1 get the form
+        #3 fields, post is provided by request.POST
+        # user and time is provided by instance post, use instance to add it to post_form
+        post = UserPost(user=request.user)
+        post_form = forms.PostForm(data=request.POST, instance=post)
+
+        # updatepost = UpdatePost()
+        # updatepost = request.POST['latest_post_time']
+        # updatepost.save()
+
+        #step 2 see if it is valid
+        if post_form.is_valid():
+            #it is valid, store it into the database
+            post_form.save()            
+            return HttpResponse("Post success")
+        #step 3 if it is not valid, return information
+        else:
+            context = {}
+            context['post_form'] = post_form
+            return render(request,'personal_stream.html',context)
+    return HttpResponse("404")
+
+def UpdateFollowPostView(request, timestamp):
+    print('UpdateFollowPostView:', timestamp)
+    if request.method == 'GET':
+        #1. get posts newer than timestamp
+        # TODO: order?:ok
+        # TODO: gte? gt = great, gte = great or equal.
+        # TODO: max time is a string of time. check if string is time.
+        followeders = Follow.objects.filter(follower=request.user).all()
+        followed_list = []
+        for followder in followeders:
+            followed_list.append(str(followder.followed))
+        print(followed_list)
+        followed_user_list = User.objects.filter(username__in=followed_list)
+        print(followed_user_list)
+        print(followed_user_list[0].id)
+        followed_id_list = []
+        for followed in followed_user_list:
+            followed_id_list.append(str(followed.id))
+        print(followed_id_list)
+        existing_posts = UserPost.objects.filter(user__in=followed_id_list).order_by('-post_time')
+        print(str(existing_posts[0].post_time))
+        print(type(existing_posts[0].post_time))
+
+        print(timestamp)
+        print(type(timestamp))
+
+        if str(existing_posts[0].post_time) == timestamp:
+            newest_posts={
+                "timestamp": timestamp,
+                "posts": "" 
+            }
+            return HttpResponse(json.dumps(newest_posts), content_type='application/json')
+        else:
+            newest_posts = UserPost.objects.filter(post_time__gt=timestamp, user__in=followed_id_list).order_by('-post_time')
+            # print(newest_post)
+            print(len(newest_posts))
+            print(newest_posts)
+            print(newest_posts[0].user)
+            print(newest_posts[0].post)
+            print(newest_posts[0].post_time)
+            print(newest_posts[0].user.id)
+
+            newest_post_pool = []
+            for i in range(len(newest_posts)):
+                newest_post = {
+                    "timestamp":(newest_posts[i].post_time+timedelta(hours=8)).strftime('%Y-%m-%d %H:%M:%S'),
+                    "user":newest_posts[i].user.username,
+                    "post":newest_posts[i].post,
+                    "user_id":str(newest_posts[i].user.id),
+                    }
+                newest_post_pool.append(newest_post)
+            print(newest_post_pool)
+
+            #2. return them and newest timestamp (json format)
+            # TODO:last post is the newest post?
+            newest_posts={
+                "timestamp": str(newest_posts[0].post_time),
+                "posts":  newest_post_pool
+            }
+            return HttpResponse(json.dumps(newest_posts), content_type='application/json')
+    return HttpResponse("404")
+
 @login_required
 def PersonalView(request,userID):
     print('UpdatePersonalView:', userID)
@@ -281,6 +388,7 @@ def PersonalProfileView(request):
         print(user_pics.profile_pic)
 
         context = {}
+        context['user_name'] = request.user.username
         context['first_name'] = request.user.first_name
         context['last_name'] = request.user.last_name
         context['age'] = personal_profile.age
@@ -377,21 +485,34 @@ def PersonalProfileUpdateView(request, userID):
         return HttpResponse(json.dumps(personal_data), content_type='application/json')
 
 @login_required
-def FollowView(request, to_user):
+def FollowView(request):
     if request.method == 'POST':
-        current_follow_status = Follow.objects.filter(follower=request.user, followed=to_user).all()
+        print(request.POST)
+        print(request.POST.getlist('to_user'))
+        print(request.POST.getlist('action'))
+        userlist = request.POST.getlist('to_user')
+        actionlist = request.POST.getlist('action')
+        idlist = request.POST.getlist('to_user_id')
+        print(type(userlist[0]))
+        print(type(actionlist[0]))
+        print(type(request.POST.getlist('to_user')))
+        current_follow_status = Follow.objects.filter(follower=request.user, followed=idlist[0]).all()
+        print(request.user)
+        print(type(request.user))
+        # return HttpResponse("Post Success!")
         # if follow
-        if current_follow_status == False:
+        if actionlist[0] == "follow":
             follow_status = Follow()
             follow_status.follower = request.user
-            follow_status.followed = to_user
+            follow_status.followed = User.objects.get(username=userlist[0])
             follow_status.save()
             return HttpResponse("Follow Success!")
         # if unfollow
-        if current_follow_status == True:
+        if actionlist[0] == "unfollow":
             current_follow_status.delete()
             return HttpResponse("Unfollow Success!")
 
+@login_required
 def UserFollowedView(request):
     if request.method == 'GET':
         followeders = Follow.objects.filter(follower=request.user).all()

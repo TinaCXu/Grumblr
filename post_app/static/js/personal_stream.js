@@ -40,7 +40,7 @@ function getUpdatePost() {
     //     url: "/update_post/"+latest_post_time,
     //     datatype: "json",
     // })
-    $.get( "/update_post/"+latest_post_time).done(function (data) {
+    $.get( "/update_follow_post/"+latest_post_time).done(function (data) {
         //3. get posts in json format. print them out.
         //https://stackoverflow.com/questions/42570854/how-to-output-json-array-value-in-ajax-success
         console.log(data);
