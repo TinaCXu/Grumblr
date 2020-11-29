@@ -4,4 +4,4 @@
 * Allowed users to follow and unfollow other users and only view the posts of the users they follow
 
 ### Login or Register
-<img src="https://github.com/TinaCXu/Grumblr/blob/master/Readme_pics/login.png" width="800" height="400" />
+<img src="https://github.com/TinaCXu/Grumblr/blob/master/Readme_pics/login.png" width="800" height="430" />
