@@ -4,8 +4,8 @@
 * Allowed users to follow and unfollow other users and only view the posts of the users they follow
 
 ### *Login or Register*
-<img src="https://github.com/TinaCXu/Grumblr/blob/master/Readme_pics/login.png" width="800" height="430" />
+<img src="https://github.com/TinaCXu/Grumblr/blob/master/Readme_pics/login.png" width="1000" height="538" />
 
 ### *View the global posts, post own new posts, view other users' personal pages and follow/unfollow*
 <img src="https://github.com/TinaCXu/Grumblr/blob/master/Readme_pics/global_stream_fin.png" width="800" height="430" />
-<img src="https://github.com/TinaCXu/Grumblr/blob/master/Readme_pics/personal_fin.png" width="800" height="400" />
+<img src="https://github.com/TinaCXu/Grumblr/blob/master/Readme_pics/personal_fin.png" width="800" height="370" />
