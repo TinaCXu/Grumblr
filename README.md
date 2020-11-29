@@ -5,3 +5,7 @@
 
 ### Login or Register
 <img src="https://github.com/TinaCXu/Grumblr/blob/master/Readme_pics/login.png" width="800" height="430" />
+
+### View the global posts, post own new posts, view other users' personal pages and follow/unfollow
+<img src="https://github.com/TinaCXu/Grumblr/blob/master/Readme_pics/global_stream_fin.png" width="800" height="430" />
+<img src="https://github.com/TinaCXu/Grumblr/blob/master/Readme_pics/personal_fin.png" width="800" height="430" />
